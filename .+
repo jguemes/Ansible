@@ -1,0 +1,30 @@
+Command script 
+a) Creo el script y lo lanzo:
+
+ansible server1 -m script -a "scripts/script1"
+
+
+b)
+
+ansible server1 -m script -a scripts/script1 -a creates=/tmp/kk.txt 
+
+o bien
+
+ansible server1 -m script -a "scripts/script1 creates=/tmp/kk.txt" 
+
+c)
+
+ansible server1 -m script -a "scripts/script1 removes=/tmp/kk.txt" 
+
+Nueva maquina:
+
+vagrant add box  lo que sea
+Para generar la configuracion, en el directorio:
+vagrant init
+vagtant up
+Se puede hacer un directorio para ansible con el ansible.cfg y ordenadores
+
+vagrant ssh-config ???? da los datos que hay que incluir en el fichero ordenadores para accederlo.
+
+
+Documentar con sphinx 
