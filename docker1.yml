@@ -1,0 +1,66 @@
+- hosts: debian1
+  user: vagrant
+  become: yes
+  tasks:
+  - name: apt-get update
+    apt:  name=apt-transport-https state=present  #necesario para apt-get-update
+  
+  - name: Install pip
+    apt: name=python-pip state=present
+  
+  - name: install docker
+    pip: name={{item}} state=present
+    with_items:
+      - docker
+      - docker-compose
+  
+  - name:   Instalar  rerequisitos
+    apt:    name={{item}} state=present #sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    with_items:
+     - apt-transport-https
+     - ca-certificates
+     - curl
+     - gnupg2
+     - software-properties-common
+  
+  - name:    Add Docker GPG key
+    apt_key: url=https://download.docker.com/linux/debian/gpg
+  - name: ver la rlease
+    shell: "lsb_release -cs"
+    register: lsb_release
+  
+  - name: debugeo
+    debug:
+      #var: "{{lsb_release.stdout_lines}}"
+      msg: "deb [arch=amd64] https://download.docker.com/linux/debian {{lsb_release.stdout_lines[0]}} stable"
+  
+  - name:    Add Docker APT repository
+    apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{lsb_release.stdout_lines[0]}} stable"
+  
+  - name:    Install Docker
+    apt: name=docker-ce state=present
+  
+  - name: Start service docker, if not started
+    service:
+      name: docker
+      state: started
+  
+  - name: Instalar docker-compose
+    get_url:
+       url : https://github.com/docker/compose/releases/download/1.7.0-rc1/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+       dest: /usr/bin/docker-compose
+       mode: 'u+x,g+x'
+  - name: copiar docker-compose.yml
+    copy:
+       src: ./docker-compose.yml
+       dest: /home/vagrant/
+       owner: vagrant
+       group: vagrant
+       mode: 0644
+       force: Yes
+  - name: desplegarlo
+    docker_service:
+        project_src: /home/vagrant/
+        state: present
+  

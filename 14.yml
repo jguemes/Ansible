@@ -1,0 +1,10 @@
+- name: Say hello to our favorite Looney Toons
+  hosts: centos1
+  tasks:
+     - name: Say Hello to Our Favorite Looney Toons
+       debug:
+           msg: "{{ item }}"
+       with_file:
+           - hello.txt
+           - favorite_toons.txt
+

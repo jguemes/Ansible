@@ -1,0 +1,15 @@
+[debian]
+
+debian1 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_ssh_user=vagrant ansible_ssh_private_key_file=/home/alumno/lab/.vagrant/machines/default/virtualbox/private_key
+
+
+debian2 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2201 ansible_ssh_user=vagrant ansible_ssh_private_key_file=/home/alumno/lab1/.vagrant/machines/default/virtualbox/private_key
+
+
+
+[centos]
+centos1 ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_user=vagrant ansible_ssh_private_key_file=/home/alumno/lab2/.vagrant/machines/default/virtualbox/private_key
+
+[webservers:children]
+debian
+centos

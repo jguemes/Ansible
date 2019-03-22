@@ -1,0 +1,6 @@
+- name: FIRST.YML
+  hosts:
+    - all
+  tasks:
+    - action: ping
+

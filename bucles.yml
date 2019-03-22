@@ -1,0 +1,9 @@
+- name: Demo of nested loops using with_nested
+  hosts: centos1
+  become: True
+  tasks:
+  - name: Say Hello using Nested Loops
+    debug: msg="The values in the array are {{item[0]}} and {{item[1]}}"
+    with_nested:
+         - [1,2]
+         - [a,b]

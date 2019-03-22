@@ -1,0 +1,44 @@
+- name: Configurar un mysql
+  hosts: debian1
+  become: True
+  vars_prompt:
+    - name: "passwd" 
+      prompt: "Introduzca la contraseña" 
+  tasks:
+    - name: Install MySQL
+      apt: 
+        name={{ item }} 
+        state=installed
+      with_items:
+        - mysql-server
+        - mysql-client
+        - python-mysqldb
+
+    - name: Eliminar la base de datos  test
+      mysql_db: name=test state=absent
+
+    - name : Crear la bbd probatinas
+      mysql_db: name=probatinas state=present
+
+    - name: Create deploy user for mysql
+      mysql_user: user="deploy" host="%" password={{passwd}} priv=probatinas.*:ALL,GRANT
+
+    - name: Ensure anonymous users are not in the database
+      mysql_user: user='' host=$item state=absent
+
+    - name: Ensure anonymous users are not in the database
+      mysql_user: user='' host=$item state=absent
+      with_items:
+         - 127.0.0.1
+         - ::1
+         - localhost
+
+    - name: ahora se puede acceder desde fuera
+      replace: dest=/etc/mysql/mariadb.conf.d/50-server.cnf regexp=127.0.0.1 replace=0.0.0.0
+      notify:
+        - restart mysql
+  handlers:
+        - name: restart mysql
+          service:
+            name: mysql
+            state: restarted

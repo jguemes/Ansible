@@ -1,0 +1,1 @@
+yum: name=nginx update_cache=yes

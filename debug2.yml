@@ -1,0 +1,21 @@
+- name: Demonstrate the debug module
+
+  hosts: all
+  become: true
+  tasks:
+     - name: Print interface
+       debug:
+          msg: "{{ansible_hostname}} -->familia : {{ansible_os_family}} tiene las interfaces : {{ ansible_interfaces }}"
+
+     - shell: /usr/bin/uptime
+       register: result
+
+     - debug:
+       # var: result
+        msg: "Uptime ---> {{result.stdout}}"
+        verbosity: 2
+
+     - name: Display all variables/facts known for a host
+       debug:
+         var: hostvars[inventory_hostname]
+         verbosity: 4

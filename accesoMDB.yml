@@ -1,0 +1,9 @@
+- name : ahora se puede acceder desde fuera
+  replace: dest=/etc/mysql/mariadb.conf.d/50-server.cnf regexp=127.0.0.1 replace=0.0.0.0
+  notify:
+            - restart mysql
+  handlers:
+    - name: restart mysql
+      service:
+         name: mysql
+         state: restarted

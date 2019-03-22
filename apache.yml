@@ -1,0 +1,11 @@
+- name: apache.yml
+  hosts:
+    - server1
+  become: yes
+  tasks:
+    - name: Asegurarse de que la package cache esta actualizada
+      apt: update_cache=yes cache_valid_time=3600
+    - name: Install web server 
+      apt: pkg=apache2 state=present
+    - name: Install index page
+      copy: src=index.html dest=/var/www/html/index.html backup=yes 
